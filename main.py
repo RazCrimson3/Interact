@@ -46,7 +46,7 @@ class RequestReceivedHandler:
             # We send it now
             print("\n\nThe other user has modified his file, syncing...")
             print("Received the bloom filter")
-            my_missing_content = getMissingContent(getNFromSize(
+            my_missing_content = getMissingContent(getNFromByteSize(
                 request.get_message_size()), request.get_message_bytes())
             print("Acknowleding and transmitting the bloom filter...")
             bf = computeBloomFilter()
@@ -57,7 +57,7 @@ class RequestReceivedHandler:
         elif(request.get_type() == utils.Request.REQUEST_TYPE_REPLY_SLAVE_BLOOMFILTER):
             print(
                 "Request was acknowledged by the other peer and has given the other bloom filter")
-            my_missing_content = getMissingContent(getNFromSize(
+            my_missing_content = getMissingContent(getNFromByteSize(
                 request.get_message_size()), request.get_message_bytes())
 
             # Send the missing contents computed to the other user
@@ -138,12 +138,11 @@ class FileEventHandler(PatternMatchingEventHandler):
             self.last_modified = time.time()
         return super().on_modified(event)
 
+
 # Use this func to find n required for BloomFilter
-# Size is the len of bloomfilter bit array
-
-
-def getNFromSize(size):
-    return floor((size * 8)*-1*(log(2)**2)/log(0.05))
+# byte_size is the len of bloomfilter bit array in bytes
+def getNFromByteSize(byte_size):
+    return floor((byte_size * 8)*-1*(log(2)**2)/log(0.05))
 
 
 def main():

@@ -55,12 +55,12 @@ class BloomFilter:
     def getBloomFilter(self):
         return self.bit_array
 
-    # Returns the size of the bit arry
+    # Returns the size of the bit array
     def getSize(self):
         return self.size
 
     def getNFromSize(self, size):
-        return math.floor((size * 8) * -1 * (math.log(2) ** 2) / math.log(self.p))
+        return math.floor(size * -1 * (math.log(2) ** 2) / math.log(self.p))
 
     # Returns the # of Hash Functions ie. h1(k), h2(k) ...
     def getNumberOfHashFunctions(self):
