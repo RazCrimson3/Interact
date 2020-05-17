@@ -1,9 +1,8 @@
 
 
-
 class Request:
     
-    REQUEST_TYPE_BLOOMFILTER  = 2
+    REQUEST_TYPE_BLOOMFILTER = 2
     REQUEST_TYPE_REPLY_SLAVE_BLOOMFILTER = 3
     REQUEST_SEND_ACTUAL_LINES = 4
     REQUEST_SEND_ENTIRE_FILE_HASH = 5
@@ -14,7 +13,7 @@ class Request:
         self.message = message
         if isinstance(message, str):
             self.byte_message = bytes(message, 'utf-8')
-        elif isinstance(message, bytes) :
+        elif isinstance(message, bytes):
             self.byte_message = message
         else:
             self.byte_message = bytes(message)
@@ -26,17 +25,13 @@ class Request:
         return self.type
 
     def get_message_size(self):
-        return len(self.actual_message())
-
-    def actual_message(self):
-        return self.byte_message.decode('utf-8')
+        return len(self.byte_message)
 
     def get_message_bytes(self):
         return self.byte_message
 
     def __str__(self):
-        return "<Request type: " + str(self.type) +  ", message: " + self.actual_message() + "...>"
-
+        return "<Request type: " + str(self.type) + ", message: " + str(self.byte_message) + "...>"
 
 
 def parse_received_data(data):

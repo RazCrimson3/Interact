@@ -68,7 +68,7 @@ class RequestReceivedHandler:
 
         elif(request.get_type() == utils.Request.REQUEST_SEND_ACTUAL_LINES):
             print("Received the actual missing lines...")
-            missing_dict = eval(request.actual_message())
+            missing_dict = eval(request.get_message_bytes())
             should_trigger_modified = False
             print("Syncing the file...")
             Synchronizer.syncFile(
@@ -97,10 +97,10 @@ class RequestReceivedHandler:
                 p2p.send_request(req)
             print("Done.")
         elif(request.get_type() == utils.Request.REQUEST_SEND_ENTIRE_FILE):
-            file_content_from_other_user = request.actual_message()
+            file_content_from_other_user = request.get_message_bytes()
             should_trigger_modified = False
 
-            with open(input_path, 'w') as f:
+            with open(input_path, 'wb') as f:
                 f.write(file_content_from_other_user)
             time.sleep(1)
             should_trigger_modified = True
@@ -143,7 +143,7 @@ class FileEventHandler(PatternMatchingEventHandler):
 
 
 def getNFromSize(size):
-    return(floor(size*-1*(log(2)**2)/log(0.05)))
+    return floor((size * 8)*-1*(log(2)**2)/log(0.05))
 
 
 def main():
@@ -251,7 +251,7 @@ def initiateSync():
 
 
 def read_entire_file():
-    with open(input_path) as f:
+    with open(input_path, "rb") as f:
         content = f.read()
         return content
 
